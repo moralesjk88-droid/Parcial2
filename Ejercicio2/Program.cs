@@ -152,6 +152,12 @@ do
 
             break;
             case 8:
+            Console.WriteLine("Resumen General");
+            foreach (var item in equipos)
+            {
+                item.Value.MostrarDatos();
+                Console.ReadKey();
+            }
             break;
             case 9:
             break;
