@@ -2,7 +2,7 @@
 
 using System.Security.Principal;
 
-Dictionary<int, Equipo> equipos = new Dictionary<int, Equipo>();
+Dictionary<string, Equipo> equipos = new Dictionary<string, Equipo>();
 int opcion;
 
 do
@@ -27,7 +27,7 @@ do
             Console.WriteLine("REGISTRO DE EQUIPO");
             Equipo In = new Equipo();
             Console.Write("Codigo del equipo:_ ");
-            In.codigo = int.Parse(Console.ReadLine());
+            In.codigo =(Console.ReadLine());
 
             if (equipos.ContainsKey(In.codigo))
             {
@@ -46,7 +46,7 @@ do
         case 2:
             Console.WriteLine("Modificar equipo:_ ");
             Console.Write("Codigo del equipo:_");
-            int codmod = int.Parse(Console.ReadLine());
+            string codmod = (Console.ReadLine());
 
             if (equipos.ContainsKey(codmod))
             {
@@ -63,7 +63,7 @@ do
         case 3:
             Console.WriteLine("Eliminar Equipo");
             Console.Write("Codigo del equipo:_ ");
-            int eliminar = int.Parse(Console.ReadLine());
+            string eliminar = (Console.ReadLine());
             if (equipos.ContainsKey(eliminar))
             {
                 equipos.Remove(eliminar);
@@ -79,7 +79,7 @@ do
         case 4:
             Console.WriteLine("Buscar Equipo");
             Console.Write("Codigo del equipo:_ ");
-            int codBus = int.Parse(Console.ReadLine());
+           string codBus = (Console.ReadLine());
             if (equipos.ContainsKey(codBus))
             {
                 foreach (var item in equipos)
@@ -109,22 +109,47 @@ do
             case 6:
             Console.WriteLine("Registro de Prestamo");
             Console.Write("Codigo del equipo:_ ");
-            int codReg=int.Parse(Console.ReadLine());
+            string codReg=(Console.ReadLine());
 
             if (equipos.ContainsKey(codReg))
             {
                 Equipo registrar= equipos[codReg];
 
-                if ()
+                Console.Write("Horas a agregar:_ ");
+                int agregar= int.Parse(Console.ReadLine());
+                if (agregar<0)
                 {
-                    
+                    Console.Write("No puede ser menor a cero");
+
                 }
-
+                else
+                {
+                    registrar.PrestadoHora += agregar;
+                    Console.Write("Total a pagar:_" + registrar.CostoTotal);
+                }
             }
-
+            Console.ReadKey();
 
             break;
             case 7:
+            Console.WriteLine("REGISTRO DE DEVOLUCION");
+            Console.Write("Codigo:_ ");
+            string devolucion= Console.ReadLine();
+            if (equipos.ContainsKey(devolucion))
+            {
+                Equipo devolver = equipos[devolucion];
+                Console.WriteLine("Registre el estado del equipo:_");
+                devolver.estado=Console.ReadLine();
+                devolver.Usohora = 0;
+                devolver.PrestadoHora = 0;
+           
+            }
+            else
+            {
+                Console.WriteLine("No existe");
+            }
+
+
             break;
             case 8:
             break;
@@ -156,7 +181,7 @@ while (opcion!=11);
 
 public class Equipo
 {
-    public int codigo;
+    public string codigo;
     public string nombre;
     public string tipo;
     public double Usohora;
@@ -165,8 +190,32 @@ public class Equipo
 
 
     
-         
+    public void Registro()
+    {
+       
+            Console.Write("Nombre del Equipo: ");
+            nombre = Console.ReadLine().ToLower();
 
+            Console.Write("Tipo del equipo:_ ");
+            TipoEquipo();
+     
+            Console.Write("Costo de horas:_ ");
+            Usohora = double.Parse(Console.ReadLine());
+
+            Console.Write("Cantidad de horas prestadas:_ ");
+            PrestadoHora = int.Parse(Console.ReadLine());
+
+        if (PrestadoHora<0 || Usohora<0)
+        {
+            Console.WriteLine("Las horas no pueden ser negativas");
+        }
+        else
+        {
+             Console.Write("Estado (Disponible, prestado, mantenimiento):_ ");
+            Estado();
+        }
+
+    }
     public void Estado()
     {
         if (estado=="disponible")
@@ -183,33 +232,28 @@ public class Equipo
         }
     }
 
-    public void Registro()
+    public void TipoEquipo()
     {
-       
-            Console.Write("Nombre del Equipo: ");
-            nombre = Console.ReadLine().ToLower();
-
-            Console.Write("Tipo del equipo:_ ");
-            tipo = Console.ReadLine().ToLower().ToUpper();
-     
-            Console.Write("Costo de horas:_ ");
-            Usohora = double.Parse(Console.ReadLine());
-
-            Console.Write("Cantidad de horas prestadas:_ ");
-            PrestadoHora = int.Parse(Console.ReadLine());
-
-        if (PrestadoHora<0 || Usohora<0)
+        if (tipo== "Laptop")
         {
-            Console.WriteLine("Las horas no pueden ser negativas");
-        }
-        else
-        {
-             Console.Write("Estado (Disponible, prestado, mantenimiento):_ ");
-            estado = Console.ReadLine().ToLower();
-        }
-       
-     
 
+            Console.WriteLine( "Laptop");
+
+        }
+        if (tipo == "Proyector")
+        {
+           Console.WriteLine("Proyector");
+
+        }
+        if (tipo == "Bocina")
+        {
+            Console.WriteLine( " Bocina");
+
+        }
+        if (tipo=="Tablet")
+        {
+           Console.WriteLine("Tablet");
+        }
     }
 
     public void Modificar()
@@ -227,6 +271,13 @@ public class Equipo
         PrestadoHora = int.Parse(Console.ReadLine());
 
     }
+
+    public void HorasExtras()
+    {
+        
+
+        
+    }
  public void CostoTotal(double total)
 {
         double costo = Usohora;
@@ -239,7 +290,7 @@ public class Equipo
     public void MostrarDatos() // void para mostrar los datos
     {
         Console.WriteLine("Nombre del equipo:_ "+nombre);
-        Console.WriteLine("Tipo de equipo:_ "+tipo);
+        Console.WriteLine($"Tipo de equipo:_ {TipoEquipo}");
         Console.WriteLine("Costo de uso por hora:_" + Usohora);
         Console.WriteLine($"Total por prestamo:_ {CostoTotal:f2} ");
         Console.WriteLine("Estado del equipo:_ "+Estado);
