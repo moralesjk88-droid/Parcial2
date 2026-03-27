@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+Dictionary<int, Equipo> equipos = new Dictionary<int, Equipo>();
 
 
 
